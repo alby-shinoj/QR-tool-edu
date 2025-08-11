@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Demo Dashboard</title>
+<style>
+body { font-family: sans-serif; margin:1rem; }
+table { width:100%; border-collapse: collapse; }
+th,td { border:1px solid #ccc; padding:4px; text-align:left; }
+#totals { margin-bottom:1rem; }
+</style>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<h1>Dashboard</h1>
+<div id="totals">Scans: <span id="scans">0</span> | Unique Devices: <span id="unique">0</span></div>
+<table id="events">
+  <thead><tr><th>Time</th><th>IP</th><th>User-Agent</th><th>Kind</th><th>Session</th></tr></thead>
+  <tbody></tbody>
+</table>
+<script>
+const scansEl=document.getElementById('scans');
+const uniqueEl=document.getElementById('unique');
+const tbody=document.querySelector('#events tbody');
+const sessions=new Set();
+function addRow(e){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${new Date(e.ts).toLocaleString()}</td><td>${e.ip}</td><td>${e.ua}</td><td>${e.kind}</td><td>${e.session_id}</td>`;
+  tbody.prepend(tr);
+}
+fetch('/api/stats').then(r=>r.json()).then(d=>{
+  scansEl.textContent=d.total_scans;
+  uniqueEl.textContent=d.unique_devices;
+  d.last_events.reverse().forEach(addRow);
+  d.last_events.forEach(e=>{ if(e.kind==='scan') sessions.add(e.session_id); });
+});
+const socket=io();
+socket.on('event',e=>{
+  addRow(e);
+  if(e.kind==='scan'){
+    scansEl.textContent=Number(scansEl.textContent)+1;
+    if(!sessions.has(e.session_id)){
+      sessions.add(e.session_id);
+      uniqueEl.textContent=sessions.size;
+    }
+  }
+});
+</script>
+</body>
+</html>

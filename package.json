@@ -1,0 +1,18 @@
+{
+  "name": "qr-safety-demo",
+  "version": "1.0.0",
+  "description": "QR Safety Awareness Demo with delayed alarm and logging",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo 'No tests'"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "qrcode": "^1.5.3",
+    "socket.io": "^4.7.5",
+    "sqlite3": "^5.1.6",
+    "uuid": "^9.0.1"
+  }
+}

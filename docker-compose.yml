@@ -1,0 +1,15 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - PORT=3000
+      - PUBLIC_URL=${PUBLIC_URL:-http://localhost:3000}
+      - ADMIN_USER
+      - ADMIN_PASS
+      - BEHIND_PROXY
+    volumes:
+      - ./events.db:/app/events.db
+      - ./public:/app/public

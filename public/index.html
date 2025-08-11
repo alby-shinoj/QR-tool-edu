@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Safety Demo</title>
+<style>
+body { font-family: sans-serif; text-align: center; margin: 2rem; }
+button { padding: 1rem 2rem; font-size: 1.2rem; }
+#tips { display: none; margin-top: 2rem; text-align: left; }
+</style>
+</head>
+<body>
+<h1>Thanks for attending </h1>
+<p>Be safe , Continue to next step.</p>
+<button id="go">Continue</button>
+<div id="tips">
+  <h2>Stay Safe!</h2>
+  <ul>
+    <li>Verify the source before scanning.</li>
+    <li>Preview links and check URLs.</li>
+    <li>Keep your device and apps updated.</li>
+    <li>Use security features in your QR scanner.</li>
+  </ul>
+</div>
+<audio id="siren" src="siren.mp3"></audio>
+<script>
+const btn = document.getElementById('go');
+const tips = document.getElementById('tips');
+const siren = document.getElementById('siren');
+function log(kind){
+  fetch('/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind})});
+}
+btn.addEventListener('click',()=>{
+  btn.disabled=true;
+  log('tap');
+  siren.play().then(()=>siren.pause()).catch(()=>{}); // unlock
+  setTimeout(()=>{
+    siren.currentTime=0;
+    siren.play().catch(()=>{});
+    log('alarm_start');
+    setTimeout(()=>{
+      siren.pause();
+      log('alarm_stop');
+      tips.style.display='block';
+    },120000);
+  },120000);
+});
+</script>
+</body>
+</html>
