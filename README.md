@@ -1,6 +1,4 @@
-# QR Safety Awareness Demo
 
-This project educates students about the risks of scanning random QR codes. A scanned QR code opens a page that requires a tap, waits two minutes, then sounds a siren for two minutes while showing safety tips. All actions are logged and visible on a live admin dashboard.
 
 ## Features
 - Delayed alarm with 120 second wait and 120 second siren.
@@ -26,7 +24,7 @@ Generate a PNG that links to `PUBLIC_URL` (defaults to `http://localhost:3000`):
 ```bash
 curl "http://localhost:3000/qr" -o qr.png
 ```
-Adjust the `text` and `size` query parameters for custom codes.
+Adjust the `text` and `size` query parameters if neeeded 
 
 ## Files
 - `server.js` – Express application
@@ -35,5 +33,3 @@ Adjust the `text` and `size` query parameters for custom codes.
 - `public/siren.mp3` – placeholder audio file
 - `docker-compose.yml`, `Dockerfile` – container setup
 
-## Disclaimer
-This demo is for educational use only. Replace `public/siren.mp3` with a real siren sound for full effect.
